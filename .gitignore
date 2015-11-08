@@ -12,5 +12,5 @@
 vignettes/*.html
 vignettes/*.pdf
 
-input/*.csv
+input/**.csv
 submissions/*.csv
