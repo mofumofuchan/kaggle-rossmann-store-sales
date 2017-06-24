@@ -10,8 +10,16 @@ registerDoMC(cores = 6)
 # Set seed
 set.seed(1337)
 
-train <- read_csv("../input/train.csv")
-test  <- read_csv("../input/test.csv")
+train <- read_csv("../input/train.csv",
+                  col_names=TRUE, col_types = cols("i", "i", 
+                                         "D", "i",
+                                         "i", "i", "i",
+                                         "c", "i"))
+test  <- read_csv("../input/test.csv",
+                  col_names=TRUE, col_types = cols("i", "i", 
+                                                   "i", "D",
+                                                   "i", "i", 
+                                                   "c", "i"))
 store <- read_csv("../input/store.csv")
 
 # Merge Store stuff
@@ -39,8 +47,8 @@ test$year <- as.factor(year(test$Date))
 #Factorize stuff
 train$DayOfWeek <- as.factor(train$DayOfWeek)
 test$DayOfWeek <- as.factor(test$DayOfWeek)
-train$Open <- as.factor(train$Open)
-test$Open <- as.factor(test$Open)
+#train$Open <- as.factor(train$Open)
+#test$Open <- as.factor(test$Open)
 train$Promo <- as.factor(train$Promo)
 test$Promo <- as.factor(test$Promo)
 train$SchoolHoliday <- as.factor(train$SchoolHoliday)
