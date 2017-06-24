@@ -13,4 +13,4 @@ vignettes/*.html
 vignettes/*.pdf
 
 input/**.csv
-submissions/*.csv
+#submissions/*.csv
