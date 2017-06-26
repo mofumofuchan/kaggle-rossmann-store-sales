@@ -1,13 +1,25 @@
 library(xgboost)
 library(lubridate)
 library(plyr)
+library(readr)
 
 set.seed(133758008)
 
 cat("reading the train and test data\n")
-train <- read.csv("../input/train.csv", stringsAsFactors = F)
-test  <- read.csv("../input/test.csv", stringsAsFactors = F)
-store <- read.csv("../input/store.csv", stringsAsFactors = F)
+train <- read_csv("../input/train.csv",
+                  col_names=TRUE, col_types = cols("i", "i", 
+                                         "D", "i",
+                                         "i", "i", "i",
+                                         "c", "i"))
+test  <- read_csv("../input/test.csv",
+                  col_names=TRUE, col_types = cols("i", "i", 
+                                                   "i", "D",
+                                                   "i", "i", 
+                                                   "c", "i"))
+store <- read_csv("../input/store.csv")
+#train <- read.csv("../input/train.csv", stringsAsFactors = F)
+#test  <- read.csv("../input/test.csv", stringsAsFactors = F)
+#store <- read.csv("../input/store.csv", stringsAsFactors = F)
 google_trends <- read.csv("../input/google_trends.csv", stringsAsFactors = F)
 
 # Merge Store data
@@ -146,10 +158,11 @@ param <- list(  objective           = "reg:linear",
                 # lambda = 1
 )
 
+cat("start training")
 clf <- xgb.train(   params              = param,
                     data                = dtrain,
                     nrounds             = 5000,
-                    verbose             = 0,
+                    verbose             = 2,
                     early.stop.round    = 100,
                     watchlist           = watchlist,
                     maximize            = FALSE,
@@ -157,7 +170,7 @@ clf <- xgb.train(   params              = param,
 )
 
 importance_matrix <- xgb.importance(feature.names, model = clf)
-xgb.plot.importance(importance_matrix)
+# xgb.plot.importance(importance_matrix)
 
 pred1 <- exp(predict(clf, data.matrix(test[,feature.names]))) -1
 submission <- data.frame(Id=test$Id, Sales=pred1)
