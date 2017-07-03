@@ -148,16 +148,16 @@ param <- list(  objective           = "reg:linear",
 
 clf <- xgb.train(   params              = param,
                     data                = dtrain,
-                    nrounds             = 5000,
-                    verbose             = 0,
-                    early.stop.round    = 100,
+                    nrounds             = 50,
+                    verbose             = 2,
+                    early.stop.round    = 10,
                     watchlist           = watchlist,
                     maximize            = FALSE,
                     feval=RMPSE
 )
 
 importance_matrix <- xgb.importance(feature.names, model = clf)
-xgb.plot.importance(importance_matrix)
+#xgb.plot.importance(importance_matrix)
 
 pred1 <- exp(predict(clf, data.matrix(test[,feature.names]))) -1
 submission <- data.frame(Id=test$Id, Sales=pred1)
